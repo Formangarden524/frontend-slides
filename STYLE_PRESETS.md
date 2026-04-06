@@ -248,9 +248,80 @@ Curated visual styles for Frontend Slides. Each preset is inspired by real desig
 
 ---
 
+## East Asian Aesthetics
+
+### 9. Song Elegance（宋韵）
+
+**Vibe:** Refined, scholarly, understated elegance, literati aesthetic
+
+**Layout:** Generous whitespace, centered or asymmetric balanced, grid-based precision
+
+**Typography:**
+- Display: `Noto Serif SC` (600/700) — classical Song serif
+- Body: `LXGW WenKai` or `Noto Sans SC` (300/400)
+
+**Colors:**
+```css
+:root {
+    --bg-primary: #f7f5f0;        /* 宣纸米白 Xuan paper */
+    --bg-secondary: #ebe7df;      /* 淡赭 Light ochre */
+    --text-primary: #2c2c2c;      /* 墨黑 Ink black */
+    --text-secondary: #6b6b6b;    /* 淡墨 Light ink */
+    --accent-ink: #4a5568;        /* 青黛 Indigo */
+    --accent-cinnabar: #a65d4d;   /* 朱砂 Cinnabar (accents) */
+    --accent-jade: #7d8b7d;       /* 青玉 Jade */
+    --accent-gold: #b8a88a;       /* 古铜 Antique bronze */
+}
+```
+
+**Signature Elements:**
+- 大量留白 Generous whitespace (padding: 15-25% viewport)
+- 细线边框 Thin borders (0.5-1px, ink color)
+- 竖排文字装饰 Vertical text accents (writing-mode: vertical-rl)
+- 印章样式标记 Seal stamps (border + cinnabar color)
+- 水墨晕染背景 Ink wash backgrounds (radial-gradient, very low opacity)
+- 网格辅助线 Grid guide lines (subtle structural presence)
+- 对称雅致 Symmetrical elegance
+
+**CSS Classes:**
+```css
+/* 竖排文字 Vertical text */
+.song-vertical {
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    letter-spacing: 0.3em;
+}
+
+/* 印章 Seal stamp */
+.song-seal {
+    border: 2px solid var(--accent-cinnabar);
+    color: var(--accent-cinnabar);
+    writing-mode: vertical-rl;
+    transform: rotate(-3deg);
+}
+
+/* 细线分隔 Divider */
+.song-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--text-secondary);
+    opacity: 0.5;
+}
+
+/* 网格背景 Grid background */
+.song-grid-bg {
+    background-image: 
+        linear-gradient(rgba(74, 85, 104, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(74, 85, 104, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+```
+
+---
+
 ## Specialty Themes
 
-### 9. Neon Cyber
+### 10. Neon Cyber
 
 **Vibe:** Futuristic, techy, confident
 
@@ -262,7 +333,7 @@ Curated visual styles for Frontend Slides. Each preset is inspired by real desig
 
 ---
 
-### 10. Terminal Green
+### 11. Terminal Green
 
 **Vibe:** Developer-focused, hacker aesthetic
 
@@ -274,7 +345,7 @@ Curated visual styles for Frontend Slides. Each preset is inspired by real desig
 
 ---
 
-### 11. Swiss Modern
+### 12. Swiss Modern
 
 **Vibe:** Clean, precise, Bauhaus-inspired
 
@@ -286,7 +357,7 @@ Curated visual styles for Frontend Slides. Each preset is inspired by real desig
 
 ---
 
-### 12. Paper & Ink
+### 13. Paper & Ink
 
 **Vibe:** Editorial, literary, thoughtful
 
@@ -310,6 +381,7 @@ Curated visual styles for Frontend Slides. Each preset is inspired by real desig
 | Pastel Geometry | Plus Jakarta Sans | Plus Jakarta Sans | Google |
 | Split Pastel | Outfit | Outfit | Google |
 | Vintage Editorial | Fraunces | Work Sans | Google |
+| Song Elegance | Noto Serif SC | LXGW WenKai | Google |
 | Neon Cyber | Clash Display | Satoshi | Fontshare |
 | Terminal Green | JetBrains Mono | JetBrains Mono | JetBrains |
 
@@ -344,4 +416,3 @@ margin-left: calc(-1 * min(10vw, 100px));     /* Works */
 ```
 
 CSS does not allow a leading `-` before function names. The browser silently discards the entire declaration — no error, the element just appears in the wrong position. **Always use `calc(-1 * ...)` to negate CSS function values.**
-
