@@ -70,6 +70,7 @@ Determine what the user wants:
 - **Mode A: New Presentation** — Create from scratch. Go to Phase 1.
 - **Mode B: PPT Conversion** — Convert a .pptx file. Go to Phase 4.
 - **Mode C: Enhancement** — Improve an existing HTML presentation. Read it, understand it, enhance. **Follow Mode C modification rules below.**
+- **Mode D: Long-scroll Infographic** — Create a vertical-scrolling infographic optimized for mobile/social media. Go to Phase 7.
 
 ### Mode C: Modification Rules
 
@@ -180,7 +181,7 @@ If images were provided, the slide outline already incorporates them from Step 1
 **Before generating, read these supporting files:**
 
 - [html-template.md](html-template.md) — HTML architecture and JS features
-- [viewport-base.css](viewport-base.css) — Mandatory CSS (include in full)
+- [viewport-base.css](viewport-base.css) — Mandatory responsive CSS (include in full)
 - [animation-patterns.md](animation-patterns.md) — Animation reference for the chosen feeling
 
 **Key requirements:**
@@ -190,6 +191,10 @@ If images were provided, the slide outline already incorporates them from Step 1
 - Use fonts from Fontshare or Google Fonts — never system fonts
 - Add detailed comments explaining each section
 - Every section needs a clear `/* === SECTION NAME === */` comment block
+
+**File output location:**
+- HTML file: `~/downloads/[filename].html`
+- All exported images/PDFs: `~/downloads/`
 
 ---
 
@@ -207,9 +212,10 @@ When converting PowerPoint files:
 ## Phase 5: Delivery
 
 1. **Clean up** — Delete `.claude-design/slide-previews/` if it exists
-2. **Open** — Use `open [filename].html` to launch in browser
-3. **Summarize** — Tell the user:
-   - File location, style name, slide count
+2. **Move to downloads** — Move the final HTML file to `~/downloads/`
+3. **Open** — Use `open ~/downloads/[filename].html` to launch in browser
+4. **Summarize** — Tell the user:
+   - File location (`~/downloads/[filename].html`), style name, slide count
    - Navigation: Arrow keys, Space, scroll/swipe, click nav dots
    - How to customize: `:root` CSS variables for colors, font link for typography, `.reveal` class for animations
    - If inline editing was enabled: Hover top-left corner or press E to enter edit mode, click any text to edit, Ctrl+S to save
@@ -218,12 +224,13 @@ When converting PowerPoint files:
 
 ## Phase 6: Share & Export (Optional)
 
-After delivery, **ask the user:** _"Would you like to share this presentation? I can deploy it to a live URL (works on any device including phones) or export it as a PDF."_
+After delivery, **ask the user:** _"Would you like to share this presentation? I can deploy it to a live URL (works on any device including phones) or export it as a PDF or image."_
 
 Options:
 
 - **Deploy to URL** — Shareable link that works on any device
 - **Export to PDF** — Universal file for email, Slack, print
+- **Export to Image** — Long-scroll image for social media
 - **Both**
 - **No thanks**
 
@@ -278,7 +285,7 @@ This captures each slide as a screenshot and combines them into a PDF. Perfect f
    bash scripts/export-pdf.sh <path-to-html> [output.pdf]
    ```
 
-   If no output path is given, the PDF is saved next to the HTML file.
+   If no output path is given, the PDF is saved to `~/downloads/`.
 
 2. **What happens behind the scenes** (explain briefly to the user):
    - A headless browser opens the presentation at 1920×1080 (standard widescreen)
@@ -291,7 +298,7 @@ This captures each slide as a screenshot and combines them into a PDF. Perfect f
    - If that fails too, it may be a network/firewall issue. Ask the user to try on a different network.
 
 4. **Deliver the PDF** — The script auto-opens it. Tell the user:
-   - The file location and size
+   - The file location (`~/downloads/[filename].pdf`) and size
    - That it works everywhere — email, Slack, Notion, Google Docs, print
    - Animations are replaced by their final visual state (still looks great, just static)
 
@@ -307,6 +314,178 @@ This captures each slide as a screenshot and combines them into a PDF. Perfect f
   ```
   This renders at 1280×720 instead of 1920×1080, typically cutting file size by 50-70% with minimal visual difference.
 
+### 6C: Export to Image (Long-scroll)
+
+This exports the presentation as a single long-scroll image, perfect for sharing on social media like WeChat Moments.
+
+1. **Run the export script:**
+
+   ```bash
+   bash scripts/export-long-image.sh <path-to-html> [output.png]
+   ```
+
+   If no output path is given, the image is saved to `~/downloads/`.
+
+2. **Output specifications:**
+   - Width: 800px (optimized for mobile)
+   - Height: Full page height (varies by content)
+   - Format: PNG
+   - File location: `~/downloads/[filename]-long.png`
+
+3. **Use cases:**
+   - WeChat Moments / 朋友圈
+   - Xiaohongshu / 小红书
+   - Any platform that prefers single long images over multi-page PDFs
+
+---
+
+## Phase 7: Long-scroll Infographic (Mobile/Social Media)
+
+This mode creates vertical-scrolling infographics optimized for mobile screens and social media sharing (WeChat Moments, Xiaohongshu, etc.). Unlike slide presentations, long-scroll infographics use a continuous vertical layout where "slides" stack on top of each other.
+
+### 7.1: When to Use This Mode
+
+Use long-scroll infographic mode when:
+- The user explicitly asks for "信息图" (infographic)
+- The content is meant to be shared on social media
+- The target audience will view it primarily on mobile phones
+- The user needs a single image file (PNG) rather than an interactive presentation
+
+### 7.2: Style Presets for Long-scroll Infographics
+
+**Available styles:**
+
+1. **Song Elegance（宋韵美学）** — Default for Chinese cultural/health/medical content
+   - Warm cream background (#f7f5f0)
+   - Serif Chinese fonts (Noto Serif SC)
+   - Ink-wash aesthetics, seal stamps, generous whitespace
+   - Best for: 中医、养生、传统文化、读书分享
+
+2. **Apple Minimal（黑白苹果风）** — Modern, clean, high contrast
+   - Pure white background
+   - Black text, gray secondary text
+   - Rounded cards (20px), system fonts
+   - Best for: 科技、科普、现代知识传播
+
+3. **Bold Editorial（ bold 编辑风）** — Magazine-style impact
+   - Strong typography hierarchy
+   - Vibrant accent colors on neutral backgrounds
+   - Best for: 商业、品牌、演讲稿
+
+4. **半宋 (Ban Song / Balanced Song)** — **The balanced style: Song elegance + information clarity**
+   - **Background**: Warm off-white `#faf9f6`, subtle radial gradients for atmosphere without distraction
+   - **Typography**: Display titles in Noto Serif SC (宋体), body text in Noto Sans SC (黑体)
+   - **Layout**: Card-based with clear borders (`1px solid #e7e5e4`) and light shadows
+   - **Structure**: Numbered section headers (red circular badges) guide the eye through information hierarchy
+   - **Colors**: Deepened Song palette — cinnabar `#9f2b1f`, jade `#4d6b3c`, antique gold `#8b6914`
+   - **Width**: 520px container with minimal side padding (`0.25rem` left/right) for maximum content density
+   - **Best for**: 中医科普、健康养生、需要兼顾美感与信息传递效率的内容
+
+### 7.3: Mobile Typography Standards
+
+**Default mobile sizing (standard):**
+
+| Element | Font Size | Use Case |
+|---------|-----------|----------|
+| Main title | 1.75rem (~28px) | Hero section |
+| Section title | 1.25rem (~20px) | Content headings |
+| Body text | 0.85rem (~14px) | Paragraphs, descriptions |
+| Tags/labels | 0.7rem (~11px) | Category tags |
+| Captions | 0.75rem (~12px) | Small annotations |
+
+**Large mobile sizing (for middle-aged/older users):**
+
+| Element | Font Size | Use Case |
+|---------|-----------|----------|
+| Main title | 2.8rem (~45px) | Hero section |
+| Section title | 1.9rem (~30px) | Content headings |
+| Body text | 1.4rem (~22px) | Paragraphs, descriptions |
+| Tags/labels | 1.4rem (~22px) | **Must match body text** |
+| Captions | 1.2rem (~19px) | Small annotations |
+
+**Extra-large mobile sizing (for users with presbyopia/vision impairment):**
+
+| Element | Font Size | Use Case |
+|---------|-----------|----------|
+| Main title | 3.4rem (~54px) | Hero section |
+| Section title | 2.4rem (~38px) | Content headings |
+| Body text | 1.55rem (~25px) | Paragraphs, descriptions |
+| Tags/labels | 1.55rem (~25px) | **Must match body text** |
+| Captions | 1.55rem (~25px) | **Must match body text** |
+| Container width | 480px | Narrower for easier reading |
+| Line height | 2.0-2.4 | Generous spacing |
+| Border width | 3px | Clear visual boundaries |
+
+**Critical rule for accessibility:** In large and extra-large sizes, **all auxiliary text (tags, labels, captions, small print) must use the same font size as body text.** Do not make tags smaller than body text — this is the #1 complaint from older users.
+
+### 7.4: 半宋 (Balanced Song) Typography Specification
+
+When generating long-scroll infographics in the **半宋** style, use these exact specifications:
+
+| Element | Font Size | Font Family | Notes |
+|---------|-----------|-------------|-------|
+| Hero title | 2.6rem (~42px) | Noto Serif SC | Main heading, centered |
+| Hero subtitle | 1.35rem (~22px) | Noto Sans SC | Secondary tagline |
+| Section number badge | 1.1rem (~18px) | Noto Serif SC | Circular red `#9f2b1f` badge |
+| Section title | 1.75rem (~28px) | Noto Serif SC | Left border accent |
+| Section subtitle | 1.85rem (~30px) | Noto Sans SC | Description under section title |
+| Card title | 2.0rem (~32px) | Noto Sans SC | Bold, inside cards |
+| Body text | **1.9rem (~30px)** | Noto Sans SC | **Primary readable text** |
+| Feature list item | 1.85rem (~30px) | Noto Sans SC | Bullet points |
+| Flow step content | 1.9rem (~30px) | Noto Sans SC | Process steps |
+| Quote text | 1.95rem (~31px) | Noto Serif SC | Italic, highlighted quotes |
+| Caption | 1.75rem (~28px) | Noto Sans SC | Visual labels, annotations |
+| Bottom note | 1.75rem (~28px) | Noto Sans SC | Footer text |
+| Summary title | 2.3rem (~37px) | Noto Serif SC | Dark background section |
+| Tag/label | 1.1rem (~18px) | Noto Sans SC | Category tags inside cards |
+
+**Layout rules for 半宋:**
+- `.slide` padding: `2rem 0.25rem` (minimal side margins)
+- `.slide-hero` padding: `3rem 0.25rem`
+- Container `max-width`: 520px
+- Card padding: `1.3rem`
+- Card border-radius: `14px`
+- Card border: `1px solid #e7e5e4`
+- Section gap: `1.1rem`
+- Line height for body: `1.85`
+
+### 7.5: Contrast Requirements
+
+For all mobile infographics, especially large-size versions:
+- **Text color**: Minimum `#2c2c2c` on light backgrounds, preferably `#1a1a1a`
+- **Secondary text**: Minimum `#4a4a4a`, never lighter than `#6b6b6b`
+- **Accent colors**: Must be deep enough to read easily (e.g., `#8b3a2b` instead of `#a65d4d`)
+- **Card backgrounds**: Use `rgba(255,255,255,0.7)` or solid light colors
+- **Borders**: Minimum 2px for large size, 3px for extra-large
+
+### 7.6: Export Naming Convention
+
+When exporting long-scroll infographics, use this naming convention:
+
+```
+~/downloads/[filename]-mobile.png           # Standard size
+~/downloads/[filename]-mobile-large.png     # Large text (middle-aged friendly)
+~/downloads/[filename]-mobile-xl.png        # Extra-large text (vision impaired)
+```
+
+For style variants:
+```
+~/downloads/[filename]-apple-mobile.png     # Apple minimal style
+~/downloads/[filename]-balanced-mobile.png  # 半宋 (Balanced Song) style
+```
+
+### 7.7: Long-scroll Export Process
+
+1. Generate the HTML with vertical-stacking `.slide` elements (not 100vh)
+2. Ensure `.reveal` elements default to `opacity: 1` (not hidden)
+3. Save HTML to `~/downloads/[filename].html`
+4. Export using:
+   ```bash
+   bash scripts/export-long-image.sh <path-to-html> [output.png]
+   ```
+5. Move final PNG to `~/downloads/`
+6. Report both file locations to the user
+
 ---
 
 ## Supporting Files
@@ -320,3 +499,4 @@ This captures each slide as a screenshot and combines them into a PDF. Perfect f
 | [scripts/extract-pptx.py](scripts/extract-pptx.py) | Python script for PPT content extraction                             | Phase 4 (conversion)      |
 | [scripts/deploy.sh](scripts/deploy.sh)             | Deploy slides to Vercel for instant sharing                          | Phase 6 (sharing)         |
 | [scripts/export-pdf.sh](scripts/export-pdf.sh)     | Export slides to PDF                                                 | Phase 6 (sharing)         |
+| [scripts/export-long-image.sh](scripts/export-long-image.sh) | Export long-scroll image for social media                  | Phase 6 (sharing)         |
